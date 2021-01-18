@@ -40,18 +40,19 @@ import ResumeTitle from '@/components/ResumeTitle'
 import ResumeSubtitle from '@/components/ResumeSubtitle'
 import ResumeAvatar from '@/components/ResumeAvatar'
 import ResumeText from '@/components/ResumeText'
+import axios from 'axios'
 
 export default {
   data () {
     return {
       type: '',
       value: '',
-      resumeData: []
+      resumeData: [],
+      loader: false
     }
   },
   methods: {
     async formSubmit () {
-      // https://course-summary-default-rtdb.firebaseio.com/resume.json
       await fetch('https://course-summary-default-rtdb.firebaseio.com/resume.json', {
         method: 'POST',
         headers: {
@@ -71,14 +72,20 @@ export default {
         }
       )
       this.value = ''
-
-      // console.log(this.resumeData)
+    },
+    async getResume () {
+      const { data } = await axios.get('https://course-summary-default-rtdb.firebaseio.com/resume.json')
+      this.resumeData = Object.keys(data).map(key => {
+        return {
+          ...data[key]
+        }
+      })
     }
   },
   computed: {
   },
   mounted () {
-    // console.log(this.resumeData.target)
+    this.getResume()
   },
   components: {
     // FormFieldType,
