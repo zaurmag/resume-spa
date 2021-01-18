@@ -14,7 +14,7 @@
         <label for="value">Значение</label>
         <textarea id="value" rows="3" name="value" v-model="value"></textarea>
       </div>
-      <app-btn color="primary" :isDisabled="false">Добавить</app-btn>
+      <app-btn color="primary" :isDisabled="value.length < 3">Добавить</app-btn>
     </form>
 
     <loader v-if="loader"></loader>
