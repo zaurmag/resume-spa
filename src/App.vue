@@ -1,16 +1,24 @@
 <template>
   <div class="container column">
     <form class="card card-w30" v-on:submit.prevent="formSubmit">
-      <form-field-type></form-field-type>
-      <form-field-value></form-field-value>
+      <div class="form-control">
+        <label for="type">Тип блока</label>
+        <select id="type" name="type" v-model="type">
+          <option value="title">Заголовок</option>
+          <option value="subtitle">Подзаголовок</option>
+          <option value="avatar">Аватар</option>
+          <option value="text">Текст</option>
+        </select>
+      </div>
+      <div class="form-control">
+        <label for="value">Значение</label>
+        <textarea id="value" rows="3" name="value" v-model="value"></textarea>
+      </div>
       <app-btn color="primary" :isDisabled="false">Добавить</app-btn>
     </form>
 
     <div class="card card-w70">
-      <resume-title>Заголовок</resume-title>
-      <resume-avatar></resume-avatar>
-      <resume-subtitle>Подзаголовок</resume-subtitle>
-      <resume-text></resume-text>
+      <component :is="`resume-${item.type}`" v-for="item in resumeData" :key="item" :value="item.value"></component>
     </div>
   </div>
   <div class="container">
@@ -23,8 +31,8 @@
 </template>
 
 <script>
-import FormFieldType from '@/components/FormFieldType'
-import FormFieldValue from '@/components/FormFieldValue'
+// import FormFieldType from '@/components/FormFieldType'
+// import FormFieldValue from '@/components/FormFieldValue'
 import AppBtn from '@/components/AppBtn'
 import CommentsCard from '@/components/CommentsCard'
 import Loader from '@/components/Loader'
@@ -36,18 +44,45 @@ import ResumeText from '@/components/ResumeText'
 export default {
   data () {
     return {
+      type: '',
+      value: '',
       resumeData: []
     }
   },
   methods: {
-    formSubmit (event) {
-      // https://course-summary-default-rtdb.firebaseio.com/
-      console.log(event)
+    async formSubmit () {
+      // https://course-summary-default-rtdb.firebaseio.com/resume.json
+      await fetch('https://course-summary-default-rtdb.firebaseio.com/resume.json', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          type: this.type,
+          value: this.value
+        })
+      })
+      const type = this.type
+      const value = this.value
+      this.resumeData.push(
+        {
+          type,
+          value
+        }
+      )
+      this.value = ''
+
+      // console.log(this.resumeData)
     }
   },
+  computed: {
+  },
+  mounted () {
+    // console.log(this.resumeData.target)
+  },
   components: {
-    FormFieldType,
-    FormFieldValue,
+    // FormFieldType,
+    // FormFieldValue,
     AppBtn,
     CommentsCard,
     Loader,
@@ -58,16 +93,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .avatar {
-    display: flex;
-    justify-content: center;
-  }
-
-  .avatar img {
-    width: 150px;
-    height: auto;
-    border-radius: 50%;
-  }
-</style>

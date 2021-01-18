@@ -1,9 +1,10 @@
 <template>
-  <h1><slot /></h1>
+  <h1>{{ value }}</h1>
 </template>
 
 <script>
 export default {
+  props: ['value'],
   name: 'ResumeTitle'
 }
 </script>
