@@ -17,7 +17,8 @@
       <app-btn color="primary" :isDisabled="false">Добавить</app-btn>
     </form>
 
-    <div class="card card-w70">
+    <loader v-if="loader"></loader>
+    <div class="card card-w70" v-else>
       <component :is="`resume-${item.type}`" v-for="item in resumeData" :key="item" :value="item.value"></component>
     </div>
   </div>
@@ -26,7 +27,6 @@
       <app-btn color="warning">Загрузить комментарии</app-btn>
     </p>
     <comments-card></comments-card>
-    <loader></loader>
   </div>
 </template>
 
@@ -53,6 +53,7 @@ export default {
   },
   methods: {
     async formSubmit () {
+      this.loader = true
       await fetch('https://course-summary-default-rtdb.firebaseio.com/resume.json', {
         method: 'POST',
         headers: {
@@ -72,14 +73,22 @@ export default {
         }
       )
       this.value = ''
+      this.loader = false
     },
     async getResume () {
-      const { data } = await axios.get('https://course-summary-default-rtdb.firebaseio.com/resume.json')
-      this.resumeData = Object.keys(data).map(key => {
-        return {
-          ...data[key]
-        }
-      })
+      try {
+        this.loader = true
+        const { data } = await axios.get('https://course-summary-default-rtdb.firebaseio.com/resume.json')
+        this.resumeData = Object.keys(data).map(key => {
+          return {
+            ...data[key]
+          }
+        })
+        this.loader = false
+      } catch (e) {
+        console.error(e.message)
+        this.loader = false
+      }
     }
   },
   computed: {
