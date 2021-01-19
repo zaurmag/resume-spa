@@ -26,7 +26,7 @@
     <p>
       <app-btn color="primary" @action="loadComments">Загрузить комментарии</app-btn>
     </p>
-    <loader v-if="loader"></loader>
+    <app-loader v-if="loader"></app-loader>
     <comments-card v-else-if="comments.length > 0" :comments-data="comments" comments-title="Комментарии"></comments-card>
   </div>
 </template>
@@ -36,7 +36,7 @@ import FormFieldSelect from '@/components/FormFieldSelect'
 import FormFieldTextarea from '@/components/FormFieldTextarea'
 import AppBtn from '@/components/AppBtn'
 import CommentsCard from '@/components/CommentsCard'
-import Loader from '@/components/Loader'
+import AppLoader from '@/components/AppLoader'
 import ResumeTitle from '@/components/ResumeTitle'
 import ResumeSubtitle from '@/components/ResumeSubtitle'
 import ResumeAvatar from '@/components/ResumeAvatar'
@@ -134,7 +134,7 @@ export default {
     FormFieldTextarea,
     AppBtn,
     CommentsCard,
-    Loader,
+    AppLoader,
     ResumeTitle,
     ResumeSubtitle,
     ResumeAvatar,
