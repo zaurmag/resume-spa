@@ -7,11 +7,6 @@
 <script>
 export default {
   name: 'ResumeAvatar',
-  props: ['value'],
-  methods: {
-    avatar () {
-      console.log(this.$attrs)
-    }
-  }
+  props: ['value']
 }
 </script>

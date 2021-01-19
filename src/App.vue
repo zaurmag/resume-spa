@@ -17,16 +17,16 @@
       <app-btn color="primary" :isDisabled="value.length < 3">Добавить</app-btn>
     </form>
 
-    <loader v-if="loader"></loader>
-    <div class="card card-w70" v-else>
+    <div class="card card-w70">
       <component :is="`resume-${item.type}`" v-for="item in resumeData" :key="item" :value="item.value"></component>
     </div>
   </div>
   <div class="container">
     <p>
-      <app-btn color="warning">Загрузить комментарии</app-btn>
+      <app-btn color="warning" @action="loadComments">Загрузить комментарии</app-btn>
     </p>
-    <comments-card></comments-card>
+    <loader v-if="loader"></loader>
+    <comments-card :comments-data="comments" v-else></comments-card>
   </div>
 </template>
 
@@ -48,12 +48,12 @@ export default {
       type: '',
       value: '',
       resumeData: [],
-      loader: false
+      loader: false,
+      comments: []
     }
   },
   methods: {
     async formSubmit () {
-      this.loader = true
       await fetch('https://course-summary-default-rtdb.firebaseio.com/resume.json', {
         method: 'POST',
         headers: {
@@ -73,7 +73,6 @@ export default {
         }
       )
       this.value = ''
-      this.loader = false
     },
     async getResume () {
       try {
@@ -89,9 +88,30 @@ export default {
         console.error(e.message)
         this.loader = false
       }
+    },
+    async loadComments () {
+      this.loader = true
+      try {
+        this.loader = true
+        const { data } = await axios.get('https://jsonplaceholder.typicode.com/comments?_limit=42')
+        this.comments = Object.keys(data).map(key => {
+          return {
+            ...data[key]
+          }
+        })
+        this.loader = false
+      } catch (e) {
+        console.warn(e.message())
+        this.loader = false
+      }
     }
   },
-  computed: {
+  provide () {
+    if (this.loader === false) {
+      return {
+        commentsData: this.comments
+      }
+    }
   },
   mounted () {
     this.getResume()
