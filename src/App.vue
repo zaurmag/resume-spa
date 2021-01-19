@@ -1,19 +1,19 @@
 <template>
   <div class="container column">
     <form class="card card-w30" v-on:submit.prevent="formSubmit">
-      <div class="form-control">
-        <label for="type">Тип блока</label>
-        <select id="type" name="type" v-model="type">
-          <option value="title">Заголовок</option>
-          <option value="subtitle">Подзаголовок</option>
-          <option value="avatar">Аватар</option>
-          <option value="text">Текст</option>
-        </select>
-      </div>
-      <div class="form-control">
-        <label for="value">Значение</label>
-        <textarea id="value" rows="3" name="value" v-model="value"></textarea>
-      </div>
+      <form-field-select
+        label="Тип блока"
+        name="type"
+        v-model:value="type"
+        :options="options"
+      ></form-field-select>
+
+      <form-field-textarea
+        label="Значение"
+        name="value"
+        v-model:value="value"
+      ></form-field-textarea>
+
       <app-btn color="primary" :isDisabled="value.length < 3">Добавить</app-btn>
     </form>
 
@@ -27,13 +27,13 @@
       <app-btn color="warning" @action="loadComments">Загрузить комментарии</app-btn>
     </p>
     <loader v-if="loader"></loader>
-    <comments-card :comments-data="comments" v-else></comments-card>
+    <comments-card :comments-data="comments" comments-title="Комментарии" v-else></comments-card>
   </div>
 </template>
 
 <script>
-// import FormFieldType from '@/components/FormFieldType'
-// import FormFieldValue from '@/components/FormFieldValue'
+import FormFieldSelect from '@/components/FormFieldSelect'
+import FormFieldTextarea from '@/components/FormFieldTextarea'
 import AppBtn from '@/components/AppBtn'
 import CommentsCard from '@/components/CommentsCard'
 import Loader from '@/components/Loader'
@@ -48,6 +48,24 @@ export default {
     return {
       type: 'title',
       value: '',
+      options: [
+        {
+          title: 'Заголовок',
+          value: 'title'
+        },
+        {
+          title: 'Подзаголовок',
+          value: 'subtitle'
+        },
+        {
+          title: 'Автар',
+          value: 'avatar'
+        },
+        {
+          title: 'Текст',
+          value: 'text'
+        }
+      ],
       resumeData: [],
       loader: false,
       comments: []
@@ -108,19 +126,12 @@ export default {
       }
     }
   },
-  provide () {
-    if (this.loader === false) {
-      return {
-        commentsData: this.comments
-      }
-    }
-  },
   mounted () {
     this.getResume()
   },
   components: {
-    // FormFieldType,
-    // FormFieldValue,
+    FormFieldSelect,
+    FormFieldTextarea,
     AppBtn,
     CommentsCard,
     Loader,
