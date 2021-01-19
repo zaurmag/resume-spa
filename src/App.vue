@@ -18,7 +18,8 @@
     </form>
 
     <div class="card card-w70">
-      <component :is="`resume-${item.type}`" v-for="item in resumeData" :key="item" :value="item.value"></component>
+      <h3 v-if="resumeData.length === 0">Добавьте первый блок, чтобы увидеть результат</h3>
+      <component v-else :is="`resume-${item.type}`" v-for="item in resumeData" :key="item" :value="item.value"></component>
     </div>
   </div>
   <div class="container">
@@ -45,7 +46,7 @@ import axios from 'axios'
 export default {
   data () {
     return {
-      type: '',
+      type: 'title',
       value: '',
       resumeData: [],
       loader: false,
@@ -72,6 +73,7 @@ export default {
           value
         }
       )
+      this.type = 'title'
       this.value = ''
     },
     async getResume () {
