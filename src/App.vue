@@ -24,10 +24,10 @@
   </div>
   <div class="container">
     <p>
-      <app-btn color="warning" @action="loadComments">Загрузить комментарии</app-btn>
+      <app-btn color="primary" @action="loadComments">Загрузить комментарии</app-btn>
     </p>
     <loader v-if="loader"></loader>
-    <comments-card :comments-data="comments" comments-title="Комментарии" v-else></comments-card>
+    <comments-card v-else-if="comments.length > 0" :comments-data="comments" comments-title="Комментарии"></comments-card>
   </div>
 </template>
 
