@@ -7,6 +7,12 @@
 <script>
 export default {
   name: 'ResumeAvatar',
-  props: ['value']
+  props: {
+    value: {
+      type: String,
+      default: '#',
+      required: false
+    }
+  }
 }
 </script>

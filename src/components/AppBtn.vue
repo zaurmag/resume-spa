@@ -7,7 +7,9 @@
 <script>
 export default {
   name: 'AppBtn',
-  emits: ['action'],
+  emits: {
+    action: null
+  },
   props: {
     color: {
       type: String,

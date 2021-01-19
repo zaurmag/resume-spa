@@ -4,7 +4,13 @@
 
 <script>
 export default {
-  props: ['value'],
+  props: {
+    value: {
+      type: String,
+      default: '',
+      required: false
+    }
+  },
   name: 'ResumeSubtitle'
 }
 </script>

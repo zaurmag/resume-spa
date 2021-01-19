@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <h2>Комментарии</h2>
+    <h2>{{ commentsTitle }}</h2>
     <ul class="list">
       <li v-for="item in commentsData" :key="item.id" class="list-item">
         <div>
@@ -14,7 +14,17 @@
 
 <script>
 export default {
-  props: ['commentsData'],
+  props: {
+    commentsData: {
+      type: Array,
+      required: true
+    },
+    commentsTitle: {
+      type: String,
+      required: true,
+      default: 'Комментарии'
+    }
+  },
   name: 'CommentsCard'
 }
 </script>
